@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.user.contactlist.R
@@ -71,6 +72,7 @@ class LinearContactFragment : Fragment() {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.contact_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
+        recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, LinearLayoutManager.HORIZONTAL))
         val adapter = ContactAdapter()
 
         val contactViewModel = ViewModelProvider(activity!!).get<ContactViewModel>(ContactViewModel::class.java)
@@ -92,9 +94,7 @@ class LinearContactFragment : Fragment() {
     companion object {
 
         private var listener: TransferInterface? = null
-
         fun newInstance(transferInterface: TransferInterface): LinearContactFragment {
-
             val args = Bundle()
             listener = transferInterface
             val fragment = LinearContactFragment()

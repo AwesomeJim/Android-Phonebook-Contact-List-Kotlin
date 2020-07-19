@@ -19,12 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:visibility="gone"
         android:layout_margin="@dimen/_10dp"
-        android:text="grid view"
-        />
-
+        android:text="grid view" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contact_recycler_view"
         android:layout_width="match_parent"
+        android:layoutAnimation="@anim/layout_animation_slide_right"
         android:layout_height="match_parent"/>
 </LinearLayout>
