@@ -6,20 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.user.contactlistkotlin.data.local.AppDatabase
 import com.example.user.contactlistkotlin.data.model.Contact
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ContactRepository(private val context: Context, private val database: AppDatabase) {
     private val contactList = ArrayList<Contact>()
     private val _contacts = MutableLiveData<List<Contact>>()
-
-    //hold a list of Contacts without duplicates
-    var cleanList: Map<String, Contact> = LinkedHashMap()
-
+/*    private var viewModelJob = Job()
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)*/
     val contacts: LiveData<List<Contact>>
         get() = _contacts
-    //get() = database.contactDao().allContacts
 
     fun saveContactsInDataBase() {
 
@@ -36,13 +31,14 @@ class ContactRepository(private val context: Context, private val database: AppD
                 val contact = Contact(name, formatPhoneNumber(phoneNo), photoUri)
                 contactList.add(contact)
             }
-            _contacts.value = contactList.distinctBy { it.phoneNumber  }.toList()
+            //use phone number as unique to remove duplicates
+            _contacts.value = contactList.distinctBy { it.phoneNumber }.toList()
         }
         cursor?.close()
     }
 
     //Format Phone Number
-    private fun formatPhoneNumber(phone: String): String{
+    private fun formatPhoneNumber(phone: String): String {
         var formatedPhone = phone.replace(" ".toRegex(), "")
         val phoneNumberLength = formatedPhone.length
         if (phoneNumberLength == 13) {

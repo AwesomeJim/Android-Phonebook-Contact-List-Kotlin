@@ -18,8 +18,15 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() 
 
     private var contacts: List<Contact>? = null
 
+    // Allows to remember the last item shown on screen
+    private val lastPosition = -1
+
+    var filtered_icontacts: List<Contact> = ArrayList()
+    //var mFilter: ItemFilter = ItemFilter()
+
     fun setContacts(contacts: List<Contact>) {
         this.contacts = contacts
+        this.filtered_icontacts=contacts
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ContactViewHolder {
@@ -40,7 +47,6 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() 
 
 
     inner class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         private val name: TextView = itemView.findViewById(R.id.contact_name)
         private val phoneNo: TextView = itemView.findViewById(R.id.contact_number)
         private val photo: ImageView = itemView.findViewById(R.id.contact_photo)
@@ -64,6 +70,7 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() 
         }
     }
 
+
     /**
      * @return a random color which is used a background by
      * services initial letters
@@ -72,4 +79,36 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() 
         val rnd = Random()
         return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
     }
+
+
+  /*  *//**
+     * Gets filter.
+     *
+     * @return the filter
+     *//*
+    fun getFilter(): Filter? {
+        return mFilter
+    }
+
+    class ItemFilter : Filter() {
+        override fun performFiltering(constraint: CharSequence): FilterResults {
+            val query = constraint.toString().toLowerCase()
+            val results = FilterResults()
+            val list: List<Contact> = ContactAdapter.contacts
+            val result_list: MutableList<Contact> = ArrayList(list.size)
+            for (i in list.indices) {
+                val str_title: String = list[i].name
+                if (str_title.toLowerCase().contains(query)) {
+                    result_list.add(list[i])
+                }
+            }
+            results.values = result_list
+            results.count = result_list.size
+            return results
+        }
+
+        override fun publishResults(constraint: CharSequence, results: FilterResults) {
+            ContactAdapter.filtered_icontacts = results.values as List<*>
+        }
+    }*/
 }

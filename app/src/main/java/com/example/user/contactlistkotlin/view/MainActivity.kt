@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity(), TransferInterface {
 
     private var fragmentManager: FragmentManager? = null
     private var fragmentTransaction: FragmentTransaction? = null
-    private var linearContactFragment: LinearContactFragment? = null
+    private var linearContactFragment: ContactListFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), TransferInterface {
         fragmentManager = supportFragmentManager
         fragmentTransaction = fragmentManager!!.beginTransaction()
 
-        linearContactFragment = LinearContactFragment.newInstance(this)
+        linearContactFragment = ContactListFragment.newInstance(this)
 
         if (findViewById<View>(R.id.fragment_container) != null)
             if (savedInstanceState == null) {
