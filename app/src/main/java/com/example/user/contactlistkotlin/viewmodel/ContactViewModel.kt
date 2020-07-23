@@ -1,13 +1,13 @@
-package com.example.user.contactlist.viewmodel
+package com.example.user.contactlistkotlin.viewmodel
 
 import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.example.user.contactlist.data.ContactRepository
-import com.example.user.contactlist.data.local.AppDatabase
-import com.example.user.contactlist.data.model.Contact
-import com.example.user.contactlist.data.model.SingleEventLiveData
+import com.example.user.contactlistkotlin.data.ContactRepository
+import com.example.user.contactlistkotlin.data.local.AppDatabase
+import com.example.user.contactlistkotlin.data.model.Contact
+import com.example.user.contactlistkotlin.data.model.SingleEventLiveData
 
 class ContactViewModel(application: Application) : AndroidViewModel(application) {
 

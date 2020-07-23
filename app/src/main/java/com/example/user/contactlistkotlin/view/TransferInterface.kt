@@ -1,4 +1,4 @@
-package com.example.user.contactlist.view
+package com.example.user.contactlistkotlin.view
 
 interface TransferInterface {
 

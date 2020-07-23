@@ -3,14 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-kapt {
-    generateStubs = true
-}
-
 android {
     compileSdkVersion 30
     defaultConfig {
-        applicationId "com.example.user.contactlist"
+        applicationId "com.example.user.contactlistkotlin"
         minSdkVersion 15
         targetSdkVersion 30
         versionCode 1

@@ -1,4 +1,4 @@
-package com.example.user.contactlist.view
+package com.example.user.contactlistkotlin.view
 
 
 import android.Manifest
@@ -17,8 +17,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.user.contactlist.R
-import com.example.user.contactlist.viewmodel.ContactViewModel
+import com.example.user.contactlistkotlin.R
+import com.example.user.contactlistkotlin.viewmodel.ContactViewModel
 
 
 class LinearContactFragment : Fragment() {

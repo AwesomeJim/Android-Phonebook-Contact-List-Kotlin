@@ -1,4 +1,4 @@
-package com.example.user.contactlist.data.model
+package com.example.user.contactlistkotlin.data.model
 
 
 import androidx.lifecycle.LifecycleOwner

@@ -1,6 +1,6 @@
-package com.example.user.contactlist
+package com.example.user.contactlistkotlin
 
-import com.example.user.contactlist.data.model.Contact
+import com.example.user.contactlistkotlin.data.model.Contact
 import java.sql.DriverManager.println
 
 fun main(args: Array<String>) {

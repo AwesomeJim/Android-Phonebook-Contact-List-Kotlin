@@ -1,22 +1,28 @@
-package com.example.user.contactlist.data
+package com.example.user.contactlistkotlin.data
 
 import android.content.Context
 import android.provider.ContactsContract
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.user.contactlist.data.local.AppDatabase
-import com.example.user.contactlist.data.model.Contact
+import com.example.user.contactlistkotlin.data.local.AppDatabase
+import com.example.user.contactlistkotlin.data.model.Contact
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ContactRepository(private val context: Context, private val database: AppDatabase) {
     private val contactList = ArrayList<Contact>()
     private val _contacts = MutableLiveData<List<Contact>>()
+
+    //hold a list of Contacts without duplicates
+    var cleanList: Map<String, Contact> = LinkedHashMap()
+
     val contacts: LiveData<List<Contact>>
         get() = _contacts
-        //get() = database.contactDao().allContacts
+    //get() = database.contactDao().allContacts
 
     fun saveContactsInDataBase() {
-       // val contacts: List<Contact> = ArrayList()
+
         val cursor = context.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null, null, null,
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC")
@@ -25,13 +31,27 @@ class ContactRepository(private val context: Context, private val database: AppD
                 val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
                 val phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                 var photoUri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI))
-                if(photoUri == null)
+                if (photoUri == null)
                     photoUri = ""
-                val contact = Contact(name, phoneNo, photoUri)
+                val contact = Contact(name, formatPhoneNumber(phoneNo), photoUri)
                 contactList.add(contact)
             }
-            _contacts.value=contactList
+            _contacts.value = contactList.distinctBy { it.phoneNumber  }.toList()
         }
         cursor?.close()
+    }
+
+    //Format Phone Number
+    private fun formatPhoneNumber(phone: String): String{
+        var formatedPhone = phone.replace(" ".toRegex(), "")
+        val phoneNumberLength = formatedPhone.length
+        if (phoneNumberLength == 13) {
+            formatedPhone = "0" + formatedPhone.substring(4)
+        } else if (phoneNumberLength == 12) {
+            formatedPhone = "0" + formatedPhone.substring(3)
+        } else if (phoneNumberLength == 10) {
+            return formatedPhone
+        }
+        return formatedPhone
     }
 }

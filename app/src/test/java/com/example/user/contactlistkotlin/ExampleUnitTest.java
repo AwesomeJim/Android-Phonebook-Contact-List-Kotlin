@@ -1,4 +1,4 @@
-package com.example.user.contactlist;
+package com.example.user.contactlistkotlin;
 
 import org.junit.Test;
 

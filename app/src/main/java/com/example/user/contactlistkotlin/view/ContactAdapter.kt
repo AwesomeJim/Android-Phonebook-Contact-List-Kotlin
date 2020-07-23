@@ -1,4 +1,4 @@
-package com.example.user.contactlist.view
+package com.example.user.contactlistkotlin.view
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.user.contactlist.R
-import com.example.user.contactlist.data.model.Contact
+import com.example.user.contactlistkotlin.R
+import com.example.user.contactlistkotlin.data.model.Contact
 import java.util.*
 
 

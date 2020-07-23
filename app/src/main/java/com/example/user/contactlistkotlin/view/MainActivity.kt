@@ -1,11 +1,11 @@
-package com.example.user.contactlist.view
+package com.example.user.contactlistkotlin.view
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.example.user.contactlist.R
+import com.example.user.contactlistkotlin.R
 
 class MainActivity : AppCompatActivity(), TransferInterface {
 

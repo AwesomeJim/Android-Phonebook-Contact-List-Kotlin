@@ -1,9 +1,9 @@
-package com.example.user.contactlist.data.local
+package com.example.user.contactlistkotlin.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import com.example.user.contactlist.data.model.Contact
+import com.example.user.contactlistkotlin.data.model.Contact
 
 @Dao
 interface ContactDao {
