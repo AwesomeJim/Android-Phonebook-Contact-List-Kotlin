@@ -1,11 +1,9 @@
-<LinearLayout android:id="@+id/container"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -78,27 +76,31 @@
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/contact_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:padding="3dp"
-        android:text="My Number"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <include
-        layout="@layout/item_contact"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8sp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/contact_recycler_view"
-        android:layout_width="match_parent"
-        android:layoutAnimation="@anim/layout_animation_slide_right"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_below="@+id/appbar"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:padding="3dp"
+            android:text="My Number"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <include
+            layout="@layout/item_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/contact_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</RelativeLayout>

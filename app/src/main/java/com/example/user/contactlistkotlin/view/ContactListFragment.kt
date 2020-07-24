@@ -82,6 +82,9 @@ class ContactListFragment : Fragment() {
         })
 
         contactViewModel.getLiveDataString().observe(viewLifecycleOwner, Observer<String> { this.toast(it!!) })
+        et_search.setOnClickListener{
+            onClick(it)
+        }
     }
 
     private fun toast(message: String) {
@@ -105,7 +108,7 @@ class ContactListFragment : Fragment() {
             isSearch = true
             search_layout.visibility = View.INVISIBLE
             searchView.visibility = View.VISIBLE
-            //setUpSearch()
+            setUpSearch()
         }
     }
 
@@ -113,14 +116,14 @@ class ContactListFragment : Fragment() {
      * Set up search.
      */
     private fun setUpSearch() {
-        searchView.setIconified(false)
-        searchView.setQueryHint("Enter name")
+        searchView.isIconified = false
+        searchView.queryHint = "Enter name"
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 return false
             }
             override fun onQueryTextChange(s: String): Boolean {
-              //  adapter.getFilter()?.filter(s)
+                adapter.filter.filter(s)
                 return true
             }
         })

@@ -25,12 +25,10 @@ class ContactViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun setup() {
-
         contacts = repository.contacts
     }
 
     fun setLiveDataString(newString: String) {
-
         this.liveDataString.setValue(newString)
     }
 
