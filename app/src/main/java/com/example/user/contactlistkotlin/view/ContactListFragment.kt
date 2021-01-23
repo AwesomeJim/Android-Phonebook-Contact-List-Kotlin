@@ -25,7 +25,7 @@ class ContactListFragment : Fragment() {
     private val requestCode = 1
     internal var view: View? = null
     private var isSearch: Boolean = false
-    private lateinit var adapter:ContactAdapter
+    private lateinit var adapter: ContactAdapter
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_linear_contact, container, false)
@@ -39,9 +39,9 @@ class ContactListFragment : Fragment() {
             if (!hasPhoneContactsPermission(Manifest.permission.READ_CONTACTS))
                 requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), requestCode)
             else
-                init(view)
+                init()
         } else {
-            init(view)
+            init()
         }
 
         /*  val grid = view.findViewById<Button>(R.id.grid_btn)
@@ -54,7 +54,7 @@ class ContactListFragment : Fragment() {
 
         when (requestCode) {
             this.requestCode -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                init(view!!)
+                init()
             else
                 toast(getString(R.string.permission_denied))
         }
@@ -62,18 +62,18 @@ class ContactListFragment : Fragment() {
 
     private fun hasPhoneContactsPermission(permission: String): Boolean {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val hasPermission = ContextCompat.checkSelfPermission(context!!, permission)
-            return hasPermission == PackageManager.PERMISSION_GRANTED
+            hasPermission == PackageManager.PERMISSION_GRANTED
         } else
-            return true
+            true
     }
 
-    private fun init(view: View) {
+    private fun init() {
         contact_recycler_view.layoutManager = LinearLayoutManager(contact_recycler_view.context)
-        contact_recycler_view.addItemDecoration(DividerItemDecoration(contact_recycler_view.context, LinearLayoutManager.HORIZONTAL))
+        contact_recycler_view.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.HORIZONTAL))
         adapter = ContactAdapter()
-        val contactViewModel = ViewModelProvider(activity!!).get<ContactViewModel>(ContactViewModel::class.java)
+        val contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
         contactViewModel.setup()
         contactViewModel.setLiveDataString(getString(R.string.live_data_message))
         contactViewModel.contacts!!.observe(viewLifecycleOwner, Observer { contacts ->
@@ -82,7 +82,7 @@ class ContactListFragment : Fragment() {
         })
 
         contactViewModel.getLiveDataString().observe(viewLifecycleOwner, Observer<String> { this.toast(it!!) })
-        et_search.setOnClickListener{
+        et_search.setOnClickListener {
             onClick(it)
         }
     }
@@ -102,7 +102,7 @@ class ContactListFragment : Fragment() {
         }
     }
 
-    fun onClick(view: View) {
+    private fun onClick(view: View) {
         val id = view.id
         if (id == R.id.et_search) {
             isSearch = true
@@ -122,6 +122,7 @@ class ContactListFragment : Fragment() {
             override fun onQueryTextSubmit(s: String): Boolean {
                 return false
             }
+
             override fun onQueryTextChange(s: String): Boolean {
                 adapter.filter.filter(s)
                 return true

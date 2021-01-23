@@ -79,7 +79,7 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(),
                 notifyDataSetChanged()
             }
             override fun performFiltering(charSequence: CharSequence): FilterResults {
-                val queryString = charSequence.toString().toLowerCase()
+                val queryString = charSequence.toString().toLowerCase(Locale.ROOT)
                 val filterResults = FilterResults()
                 filterResults.values = if (queryString == null || queryString.isEmpty())
                     contacts

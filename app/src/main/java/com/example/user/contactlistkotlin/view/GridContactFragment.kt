@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,14 +32,14 @@ class GridContactFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(recyclerView.context, 2)
         val adapter = ContactAdapter()
 
-        val contactViewModel = ViewModelProvider(activity!!).get<ContactViewModel>(ContactViewModel::class.java!!)
+        val contactViewModel = ViewModelProvider(activity!!).get(ContactViewModel::class.java!!)
 
-        contactViewModel.contacts!!.observe(viewLifecycleOwner, Observer{ contacts ->
+        contactViewModel.contacts!!.observe(viewLifecycleOwner, { contacts ->
             recyclerView.adapter = adapter
             adapter.setContacts(contacts!!)
         })
 
-        contactViewModel.liveDataString.observe(viewLifecycleOwner, Observer{ s -> Toast.makeText(context, s, Toast.LENGTH_SHORT).show() })
+        contactViewModel.liveDataString.observe(viewLifecycleOwner, { s -> Toast.makeText(context, s, Toast.LENGTH_SHORT).show() })
 
     }
 
