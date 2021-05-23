@@ -32,7 +32,7 @@ class GridContactFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(recyclerView.context, 2)
         val adapter = ContactAdapter()
 
-        val contactViewModel = ViewModelProvider(activity!!).get(ContactViewModel::class.java!!)
+        val contactViewModel = ViewModelProvider(requireActivity()).get(ContactViewModel::class.java!!)
 
         contactViewModel.contacts!!.observe(viewLifecycleOwner, { contacts ->
             recyclerView.adapter = adapter

@@ -12,14 +12,12 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.user.contactlistkotlin.R
 import com.example.user.contactlistkotlin.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.fragment_linear_contact.*
-
 
 class ContactListFragment : Fragment() {
     private val requestCode = 1
@@ -63,7 +61,7 @@ class ContactListFragment : Fragment() {
     private fun hasPhoneContactsPermission(permission: String): Boolean {
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val hasPermission = ContextCompat.checkSelfPermission(context!!, permission)
+            val hasPermission = ContextCompat.checkSelfPermission(requireContext(), permission)
             hasPermission == PackageManager.PERMISSION_GRANTED
         } else
             true
@@ -76,12 +74,12 @@ class ContactListFragment : Fragment() {
         val contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
         contactViewModel.setup()
         contactViewModel.setLiveDataString(getString(R.string.live_data_message))
-        contactViewModel.contacts!!.observe(viewLifecycleOwner, Observer { contacts ->
+        contactViewModel.contacts!!.observe(viewLifecycleOwner, { contacts ->
             contact_recycler_view.adapter = adapter
             adapter.setContacts(contacts!!)
         })
 
-        contactViewModel.getLiveDataString().observe(viewLifecycleOwner, Observer<String> { this.toast(it!!) })
+        contactViewModel.getLiveDataString().observe(viewLifecycleOwner, { this.toast(it!!) })
         et_search.setOnClickListener {
             onClick(it)
         }
