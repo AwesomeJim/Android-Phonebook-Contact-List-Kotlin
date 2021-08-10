@@ -67,7 +67,7 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(),
                 photo.visibility = View.GONE
                 drawableTextView.visibility = View.VISIBLE
                 val serviceSubString: String = contact.name.substring(0, 2)
-                drawableTextView.text = serviceSubString.toUpperCase(Locale.getDefault())
+                drawableTextView.text = serviceSubString.uppercase(Locale.getDefault())
             }
         }
     }

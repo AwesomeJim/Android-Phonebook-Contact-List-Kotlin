@@ -5,10 +5,12 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -20,22 +22,42 @@ import com.example.user.contactlistkotlin.viewmodel.ContactViewModel
 import kotlinx.android.synthetic.main.fragment_linear_contact.*
 
 class ContactListFragment : Fragment() {
-    private val requestCode = 1
+
     internal var view: View? = null
     private var isSearch: Boolean = false
     private lateinit var adapter: ContactAdapter
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+
+    // Single Permission Contract
+    private val askContactPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
+            if (result) {
+                init()
+                Log.e(TAG, "TAG Contract permission granted")
+            } else {
+                Log.e(TAG, "Contract Manifest.permission denied")
+                Toast.makeText(
+                    requireActivity(),
+                    "You have disabled a contacts permission",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_linear_contact, container, false)
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.view = view
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!hasPhoneContactsPermission(Manifest.permission.READ_CONTACTS))
-                requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), requestCode)
+                askContactPermission.launch(Manifest.permission.READ_CONTACTS)
             else
                 init()
         } else {
@@ -46,20 +68,7 @@ class ContactListFragment : Fragment() {
           grid.setOnClickListener { listener!!.goToGrid() }*/
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            this.requestCode -> if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                init()
-            else
-                toast(getString(R.string.permission_denied))
-        }
-    }
-
     private fun hasPhoneContactsPermission(permission: String): Boolean {
-
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val hasPermission = ContextCompat.checkSelfPermission(requireContext(), permission)
             hasPermission == PackageManager.PERMISSION_GRANTED
@@ -69,7 +78,12 @@ class ContactListFragment : Fragment() {
 
     private fun init() {
         contact_recycler_view.layoutManager = LinearLayoutManager(contact_recycler_view.context)
-        contact_recycler_view.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.HORIZONTAL))
+        contact_recycler_view.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                LinearLayoutManager.HORIZONTAL
+            )
+        )
         adapter = ContactAdapter()
         val contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
         contactViewModel.setup()
@@ -98,6 +112,8 @@ class ContactListFragment : Fragment() {
             fragment.arguments = args
             return fragment
         }
+
+        private const val TAG = "ContactListFragment"
     }
 
     private fun onClick(view: View) {
