@@ -41,12 +41,16 @@ class ContactRepository(private val context: Context, private val database: AppD
     private fun formatPhoneNumber(phone: String): String {
         var formatedPhone = phone.replace(" ".toRegex(), "")
         val phoneNumberLength = formatedPhone.length
-        if (phoneNumberLength == 13) {
-            formatedPhone = "0" + formatedPhone.substring(4)
-        } else if (phoneNumberLength == 12) {
-            formatedPhone = "0" + formatedPhone.substring(3)
-        } else if (phoneNumberLength == 10) {
-            return formatedPhone
+        when (phoneNumberLength) {
+            13 -> {
+                formatedPhone = "0" + formatedPhone.substring(4)
+            }
+            12 -> {
+                formatedPhone = "0" + formatedPhone.substring(3)
+            }
+            10 -> {
+                return formatedPhone
+            }
         }
         return formatedPhone
     }

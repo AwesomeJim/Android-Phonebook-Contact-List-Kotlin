@@ -34,12 +34,18 @@ class GridContactFragment : Fragment() {
 
         val contactViewModel = ViewModelProvider(requireActivity()).get(ContactViewModel::class.java!!)
 
-        contactViewModel.contacts!!.observe(viewLifecycleOwner, { contacts ->
+        contactViewModel.contacts!!.observe(viewLifecycleOwner) { contacts ->
             recyclerView.adapter = adapter
             adapter.setContacts(contacts!!)
-        })
+        }
 
-        contactViewModel.liveDataString.observe(viewLifecycleOwner, { s -> Toast.makeText(context, s, Toast.LENGTH_SHORT).show() })
+        contactViewModel.liveDataString.observe(viewLifecycleOwner) { s ->
+            Toast.makeText(
+                context,
+                s,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
     }
 

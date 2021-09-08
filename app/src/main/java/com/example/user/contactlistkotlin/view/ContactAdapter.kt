@@ -85,7 +85,7 @@ class ContactAdapter : RecyclerView.Adapter<ContactAdapter.ContactViewHolder>(),
                     contacts
                 else
                     contacts?.filter {
-                        it.name.toLowerCase().contains(queryString)
+                        it.name.lowercase(Locale.getDefault()).contains(queryString)
                     }
                 return filterResults
             }
