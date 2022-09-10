@@ -21,14 +21,14 @@ class ContactRepository(private val context: Context, private val database: AppD
         val cursor = context.contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null, null, null,
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC")
-        if (cursor?.count ?: 0 > 0) {
+        if ((cursor?.count ?: 0) > 0) {
             while (cursor!!.moveToNext()) {
                 val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
                 val phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                 var photoUri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI))
                 if (photoUri == null)
                     photoUri = ""
-                val contact = Contact(name, formatPhoneNumber(phoneNo), photoUri)
+                val contact = Contact(name, phoneNo, photoUri)
                 contactList.add(contact)
             }
             //use phone number as unique to remove duplicates
@@ -37,21 +37,4 @@ class ContactRepository(private val context: Context, private val database: AppD
         cursor?.close()
     }
 
-    //Format Phone Number
-    private fun formatPhoneNumber(phone: String): String {
-        var formatedPhone = phone.replace(" ".toRegex(), "")
-        val phoneNumberLength = formatedPhone.length
-        when (phoneNumberLength) {
-            13 -> {
-                formatedPhone = "0" + formatedPhone.substring(4)
-            }
-            12 -> {
-                formatedPhone = "0" + formatedPhone.substring(3)
-            }
-            10 -> {
-                return formatedPhone
-            }
-        }
-        return formatedPhone
-    }
 }

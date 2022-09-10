@@ -88,7 +88,7 @@ class ContactListFragment : Fragment() {
         val contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
         contactViewModel.setup()
         contactViewModel.setLiveDataString(getString(R.string.live_data_message))
-        contactViewModel.contacts!!.observe(viewLifecycleOwner) { contacts ->
+        contactViewModel.contactList.observe(viewLifecycleOwner) { contacts ->
             contact_recycler_view.adapter = adapter
             adapter.setContacts(contacts!!)
         }

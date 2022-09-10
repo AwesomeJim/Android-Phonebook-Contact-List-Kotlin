@@ -34,7 +34,7 @@ class GridContactFragment : Fragment() {
 
         val contactViewModel = ViewModelProvider(requireActivity()).get(ContactViewModel::class.java)
 
-        contactViewModel.contacts!!.observe(viewLifecycleOwner) { contacts ->
+        contactViewModel.contactList.observe(viewLifecycleOwner) { contacts ->
             recyclerView.adapter = adapter
             adapter.setContacts(contacts!!)
         }
