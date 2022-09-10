@@ -31,6 +31,9 @@ class ContactViewModel(application: Application) : AndroidViewModel(application)
     private var start: Date? = null
     private lateinit var end: Date
 
+
+    protected var phones: HashMap<Long, MutableList<String?>> = HashMap()
+
     init {
         repository = ContactRepository(application, database)
         liveDataString = SingleEventLiveData()
@@ -42,29 +45,49 @@ class ContactViewModel(application: Application) : AndroidViewModel(application)
 
     fun setup() {
         startLoading()
-        val cursor = context?.contentResolver?.query(
-            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-            null, null, null,
-            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+        var cursor = context.applicationContext.contentResolver.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+        Constants.PROJECTION_NUMBERS, null, null, null
         )
         if (cursor != null) {
-            while (cursor.moveToNext()) {
-                val name =
-                    cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                val phoneNo =
-                    cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                var photoUri =
-                    cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI))
-                if (photoUri == null)
-                    photoUri = ""
-                val contact = Contact(name, phoneNo, photoUri)
-                contacts.add(contact)
+            while (!cursor.isClosed && cursor.moveToNext()) {
+                val contactId = cursor.getLong(0)
+                val phone = cursor.getString(1)
+                var list: MutableList<String?>?
+                if (phones.containsKey(contactId)) {
+                    list = phones[contactId]
+                } else {
+                    list = ArrayList()
+                    phones[contactId] = list
+                }
+                list!!.add(phone)
+            }
+            cursor.close()
+            cursor = context.applicationContext.contentResolver.query(
+                ContactsContract.Contacts.CONTENT_URI,
+                Constants.PROJECTION_DETAILS,
+                null,
+                null,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+            )
+            if (cursor != null) {
+                while (!cursor.isClosed && cursor.moveToNext()) {
+                    val contactId = cursor.getLong(0)
+                    val name = cursor.getString(1)
+                    val contactPhones = phones[contactId]
+                    contactPhones?.let {
+                        for (phone in it) {
+                            contacts.add(Contact(name, phone ?: "", ""))
+                        }
+                    }
+                }
+                cursor.close()
             }
             //use phone number as unique to remove duplicates
-            _contacts.postValue(contacts.distinct())
+            _contacts.postValue(contacts)
             end = Calendar.getInstance().time
             val timeTaken = (end.time - start!!.time).toString() + " ms"
-            Log.e("ContactViewModel", "<<<<<<<<===LoadContacts=>>>>>>>:${contacts.distinct().size} ^^ $timeTaken")
+            Log.e("ContactViewModel", "<<<<<<<<===LoadContacts=>>>>>>>:${contacts.size} ^^ $timeTaken")
         }
         cursor?.close()
     }
